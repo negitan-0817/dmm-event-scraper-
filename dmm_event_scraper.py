@@ -61,7 +61,7 @@ def save_to_json(data):
 if __name__ == "__main__":
     data = parse_event_list()
     save_to_json(data)
-
+    git_commit_and_push()
 
 import os
 import subprocess
