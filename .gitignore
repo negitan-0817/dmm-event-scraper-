@@ -1,0 +1,23 @@
+# Python キャッシュファイル
+__pycache__/
+*.py[cod]
+*.pyo
+
+# 仮想環境（必要に応じて）
+venv/
+.env/
+.venv/
+
+# OS ごとの不要ファイル
+.DS_Store
+Thumbs.db
+
+# エディタ・IDE の設定ファイル（任意）
+.vscode/
+.idea/
+
+# 出力ファイルなど（必要に応じて）
+*.log
+
+# 🚫 GitHub へ push したいファイルはここに含めない
+# public/events.json は push 対象なので .gitignore に含めないでください
