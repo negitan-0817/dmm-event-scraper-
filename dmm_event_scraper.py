@@ -84,6 +84,9 @@ def git_commit_and_push():
 
     try:
         os.chdir(repo_dir)
+
+        # 念のため Git のキャッシュから一度削除してから再登録
+        subprocess.run(["git", "rm", "--cached", "public/events.json"], check=False)
         subprocess.run(["git", "add", "public/events.json"], check=True)
 
         commit_message = f"Update events.json at {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}"
@@ -91,6 +94,7 @@ def git_commit_and_push():
 
         subprocess.run(["git", "push", https_url, "HEAD:refs/heads/main"], check=True)
         print("✅ events.json を GitHub に push しました。")
+
 
     except subprocess.CalledProcessError as e:
         print("❌ Git 操作中にエラーが発生しました:", e)
