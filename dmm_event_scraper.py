@@ -85,7 +85,7 @@ def git_commit_and_push():
         commit_message = f"Update events.json at {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}"
         subprocess.run(["git", "commit", "-m", commit_message], check=True)
 
-        subprocess.run(["git", "push", https_url, "main"], check=True)
+        subprocess.run(["git", "push", https_url, "HEAD:refs/heads/main"], check=True)
         print("✅ events.json を GitHub に push しました。")
 
     except subprocess.CalledProcessError as e:
