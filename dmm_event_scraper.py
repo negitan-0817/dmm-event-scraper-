@@ -96,3 +96,39 @@ if __name__ == "__main__":
     save_to_json(data)
     git_commit_and_push()
 
+
+import os
+import subprocess
+from datetime import datetime
+
+def git_commit_and_push():
+    repo_dir = os.path.dirname(os.path.abspath(__file__))
+    token = os.environ.get("GH_TOKEN")
+    if not token:
+        print("GitHub token (GH_TOKEN) が設定されていません。")
+        return
+
+    # リポジトリ情報
+    repo_url = "https://github.com/negitan-0817/dmm-event-scraper.git"
+    https_url = repo_url.replace("https://", f"https://{token}@")
+
+    # Git 設定（初回のみ）
+    subprocess.run(["git", "config", "--global", "user.email", "render@render.com"], check=True)
+    subprocess.run(["git", "config", "--global", "user.name", "Render Bot"], check=True)
+
+    try:
+        os.chdir(repo_dir)
+        subprocess.run(["git", "add", "public/events.json"], check=True)
+
+        commit_message = f"Update events.json at {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}"
+        subprocess.run(["git", "commit", "-m", commit_message], check=True)
+
+        subprocess.run(["git", "push", https_url, "HEAD:refs/heads/main"], check=True)
+        print("✅ events.json を GitHub に push しました。")
+
+    except subprocess.CalledProcessError as e:
+        print("❌ Git 操作中にエラーが発生しました:", e)
+
+# --- ここで呼び出し ---
+git_commit_and_push()
+
