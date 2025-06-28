@@ -68,18 +68,21 @@ def git_commit_and_push():
         print("GitHub token (GH_TOKEN) が設定されていません。")
         return
 
+    # リポジトリ情報
     repo_url = "https://github.com/negitan-0817/dmm-event-scraper.git"
     https_url = repo_url.replace("https://", f"https://{token}@")
 
+    # Git 設定（初回のみ）
     subprocess.run(["git", "config", "--global", "user.email", "render@render.com"], check=True)
     subprocess.run(["git", "config", "--global", "user.name", "Render Bot"], check=True)
 
     try:
         os.chdir(repo_dir)
 
-        # 念のための rm --cached（古いGitignoreキャッシュ対策）
-        subprocess.run(["git", "rm", "--cached", "public/events.json"], check=False)
-        subprocess.run(["git", "add", "public/events.json"], check=True)
+        # 念のため untrack → 再 add
+        json_path = os.path.join(repo_dir, "public", "events.json")
+        subprocess.run(["git", "rm", "--cached", json_path], check=False)
+        subprocess.run(["git", "add", json_path], check=True)
 
         commit_message = f"Update events.json at {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}"
         subprocess.run(["git", "commit", "-m", commit_message], check=True)
@@ -89,6 +92,7 @@ def git_commit_and_push():
 
     except subprocess.CalledProcessError as e:
         print("❌ Git 操作中にエラーが発生しました:", e)
+
 
 # メイン処理
 if __name__ == "__main__":
